@@ -5,20 +5,18 @@ node_js:
 env:
   global:
   - BUILD_TIMEOUT=10000
+  - secure: O3n46MFI3Su6mVF43D5vi3iQJQtyzF9LqF/ZT76J27EJ28l2AWaB6o9zg/BVHPg0xzkaW6a7ei8V/GidMd33OzoqrKcThnFrLnYJaDLOnvJHkqaQO7kmgznvext9mGszzO/dnvlI+0UML9QvqbRfg+xw7sowTi6wxVacBTK47h8R8L03G4uAXpdbHaukyIVrgznCy0d1vYRbX8yT/49m3jzfQklUJ9SHb4VTlE9y5Rs+epoiHFNZAxeDjpFkg3U6GXQsPnstCl/kWt/WrbPM1Z+pKDWojtq2VSSgxvu4J8fNbAYJ39WGiCgtODeT6Q1/+vO0Ai6WGjAQfa4/PStPGWe8jix+ORa+mKKaaRYxYuq62szjpaFnAJ6nuAvFe06TL7O1KTDtVHwe6gLijmZx81zOW97DCGKFuJGbCwTW7lA6IOdgGit1K6vndtbw6820b7DxISfNGn1iCgp1ySQr9MuWTZBbUZ32HSZECNbuwDJ9BSKJMPLfySNHLO8qkXsIrROEk+HpYq2y1NroNckMBwn6shYrhdF8KBiJVrRxlTSztYAhFOdJqxCo1DKlu5CAEW3r8jUviyCTZlGOY2XcR9p9sx86gSL4tLsB2T9M9XXzr9wuPSOY8xlHvlFyshbahBIM2G/nmlV4hILPeMLtf8Cv9UetrIJbxacNFsL/DiA=
+  - secure: IPgWVQJFLYKqNoaS/w+WiZExyTpSM9zC0GQC3wgGI5SCiVVpSU0cCLYtxGtPRmIBTcnwXmCju3cbbdvBfYka8+OI849W0ZCX+1pl8lRcBzwSX/uM3Z5Io0wTGNshubX1ON6chQcdIveABA6xv0GzgJwQNVt9UdKv0y2em5I7t2AB+0r3Y5acN9C1TZBjHCxGgVaofn9rQ82bkb1F6uyJ84Cxg2ZL8l5LhMd0kRh3Z7sZXwYO00EAswTDD2+e8cTfO/hoCOtjuZdh4FnVhKE1J0weZHXYlThS54WcBUCUbQ3kvpwSjFBxpFhR704tzOFxeHqCa+1B5CcRz5oN5bVs4WwJb1oGzSUHHyJokgNU0HXhIrhVwfzPfVbQzmC6P0Dx5eg0/r8ZZvN6MgbK+SjYuM00AHr5iun8lOlEYipEdF39UvO0pbmuSAA2WQ4jfu9+E6NVouNIbpHZFbhLPdOPh2Zy8/H17feEhCKzGUxygf6qvDf0jLEdktalo1fQkYTXNx4pFkhpMjDE69lYQGpJXr9ttwwF3kiXAwcPs+yqHKzk/OztE8gCOaC6587nPsLBlU2RSReiKMDmXZE02Z9BD5NI1moCClDv+spu4MY757c/7rBSWdCOrVlIhFoLYB7vEZc/0V8X0r3LScehlHvyfwq2gUmO+/QcEvv52IED7lw=
+  application_name: packd
+  environment: packd-prod
+  default_region: us-east-1
+before_install:
+- sudo apt-get -y install python-pip python-dev
+- sudo pip install awsebcli
 install: npm install
-after_success: if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run deploy:ci;
-  fi
+after_success:
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run deploy:ci; fi
+- eb deploy
 branches:
   only:
   - master
-deploy:
-  provider: elasticbeanstalk
-  access_key_id: AKIAILFVEK456IRXIXIA
-  secret_access_key:
-    secure: fJxQqPkKF0vxT57RR+NKR936fIgmyVH72bT6RM7Vj9Q5wU8l45QEgog+h7NWDm+u9a65PtpbtqskLWJt2v3E9hi8skrkKY+2SJGEK2Obqzba4b77QV1+2Znrb9Vp1pcWETHkPYGpcsTlAiraQDnpTJSvnzsOp+/x7kXMsi4BT8pFOPqyVtcKjuxXah6bCjiROQZo7sSuaii2ppwiKu9C0IRANCyaW3kpYQBIvUv/ntn1SQHTOPDpcyGP2DTNR5LzISTmkcqOPzVL6DhyIvxR5jbA2yoVXpbP0iV4HBfXMdClJ5g/RWETxiTSMKSrp5M3Tq2AX6r06mvNRByZjytrsPEMJs8u2g5Eph27eRj9OwBtzezuDqz1ewfTR1ol40TwVrtNEqwVFhxeli2RB7ly3CaDuf60WwyJAd0uHyTocBQVQMKmgHSLxqmeAWNgkRCKBD6nEcB3/Zf8xVmJGTd2p7+0qqvH0RWWqGy/u7KubWGI4zKbowzlbRj8VI7EUiBnZO7H6oe2fItYDhfEHodQLqFmUNMeACLf6EtKMDZaPPJfNC7ze/KVYmoYlaqZpwTLw+UCIaClzWUJXFJ+hk1NPemNElUARUQ3hFP58bCA+jqelBPehujt8/Wud0vdscdHicPMfqDdY2KgOGyRE3fy1ufScEJnCegfECbRtRkFXis=
-  region: us-east-1
-  app: packd
-  env: packd-prod
-  bucket_name: elasticbeanstalk-us-east-1-161663720085
-  on:
-    branch: master
