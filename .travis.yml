@@ -17,6 +17,7 @@ before_install:
 install: npm install
 after_success:
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run deploy:ci; fi
+- eb init
 - eb deploy
 branches:
   only:
